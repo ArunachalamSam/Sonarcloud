@@ -1,81 +1,56 @@
 import React, { useState } from 'react';
 
-const Form = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    password: ''
-  });
-
-  const [errors, setErrors] = useState({});
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-    setErrors({ ...errors, [name]: '' }); // Clear error message when input changes
-  };
+const BugForm = () => {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
+  const [submitted, setSubmitted] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const validationErrors = {};
-    if (!formData.name) {
-      validationErrors.name = 'Name is required';
+    if (name && email && message) {
+      console.log('Form submitted:', { name, email, message });
+      setSubmitted(true);
+    } else {
+      alert('Please fill in all fields!');
     }
-    if (!formData.email) {
-      validationErrors.email = 'Email is required';
-    } else if (!/^\S+@\S+\.\S+$/.test(formData.email)) {
-      validationErrors.email = 'Invalid email address';
-    }
-    if (!formData.password) {
-      validationErrors.password = 'Password is required';
-    } else if (formData.password.length < 6) {
-      validationErrors.password = 'Password must be at least 6 characters';
-    }
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-      return;
-    }
-    // Form submission logic (e.g., submit data to server)
   };
 
   return (
     <div>
-      <h2>React Form with Validation</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Name:</label>
-          <input
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-          />
-          {errors.name && <span style={{ color: 'red' }}>{errors.name}</span>}
-        </div>
-        <div>
-          <label>Email:</label>
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-          />
-          {errors.email && <span style={{ color: 'red' }}>{errors.email}</span>}
-        </div>
-        <div>
-          <label>Password:</label>
-          <input
-            type="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-          />
-          {errors.password && <span style={{ color: 'red' }}>{errors.password}</span>}
-        </div>
-        <button type="submit">Submit</button>
-      </form>
+      <h2>Contact Us</h2>
+      {submitted ? (
+        <p>Thank you for your message!</p>
+      ) : (
+        <form onSubmit={handleSubmit}>
+          <div>
+            <label>Name:</label> {/* Missing "for" attribute */}
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+          </div>
+          <div>
+            <label>Email:</label> {/* Missing "for" attribute */}
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
+          <div>
+            <label>Message:</label> {/* Missing "for" attribute */}
+            <textarea
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+            ></textarea>
+          </div>
+          <button type="submit">Submit</button>
+        </form>
+      )}
     </div>
   );
 };
 
-export default Form;
+export default BugForm;
